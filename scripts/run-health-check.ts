@@ -1,9 +1,10 @@
+import '../scripts/.env.loader.js';
+
 import { getSnapshot } from '../services/snapshot-service/getSnapshot.js';
 import { compareSnapshotShapes } from '../core/utils/compareSnapshotShapes.js';
 import { resolveLatestSnapshot } from '../core/utils/resolveLatestSnapshot.js';
 import fs from 'fs-extra';
 import path from 'path';
-import 'dotenv/config';
 
 const delay = (ms) => new Promise(res => setTimeout(res, ms));
 const FILE_KEY = process.env.TEST_FILE_KEY;
@@ -14,7 +15,6 @@ const snapshotDir = path.join('plugins', 'demo-mint-component-audit', 'snapshots
 (async () => {
   console.log('🩺 Running Design Infra Health Check...');
 
-  // Step 1: Fetch fresh snapshot
   const freshPath = await loadingStep('🔍 Fetching fresh snapshot', async () => {
     const fresh = await getSnapshot({ fileKey: FILE_KEY, pageName: PAGE_NAME, nodeId: NODE_ID });
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
@@ -25,7 +25,6 @@ const snapshotDir = path.join('plugins', 'demo-mint-component-audit', 'snapshots
     return tempPath;
   });
 
-  // Step 2: Compare with last snapshot
   let lastPath = null;
   let usedFallback = false;
 
@@ -42,10 +41,8 @@ const snapshotDir = path.join('plugins', 'demo-mint-component-audit', 'snapshots
     await compareSnapshotShapes(lastPath, freshPath);
   }
 
-  // Step 3: Clean up
   await fs.remove(freshPath);
 
-  // Final Report
   console.log('\n📁 File Key:', FILE_KEY);
   console.log('📄 Page Name:', PAGE_NAME);
   console.log('🔖 Node ID:', NODE_ID || '(not scoped)');
