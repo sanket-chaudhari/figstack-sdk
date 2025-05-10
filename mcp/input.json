@@ -1,14 +1,18 @@
 {
     "files": [
       {
-        "path": "core/traversal/traversal.ts",
-        "content": "import { getTeamProjects, getProjectFiles, getFile } from '../figma-api/figma-api.js';\n\nexport async function getAllFilesInTeam(teamId) {\n  const projectsResponse = await getTeamProjects(teamId);\n  const projects = projectsResponse.projects ?? [];\n  const allFiles = [];\n\n  for (const project of projects) {\n    const filesResponse = await getProjectFiles(project.id);\n    const files = filesResponse.files ?? [];\n    for (const file of files) {\n      allFiles.push({ name: file.name, key: file.key, projectId: project.id });\n    }\n  }\n\n  return allFiles;\n}\n\n/**\n * Extract all top-level pages from a given Figma file response\n */\nexport function getPagesInFile(file) {\n  return file.document?.children ?? [];\n}\n\n/**\n * Given a page node, return all top-level FRAME nodes inside it\n */\nexport function getTopLevelFramesInPage(pageNode) {\n  return (pageNode.children ?? []).filter(node => node.type === 'FRAME');\n}"
+        "path": "plugins/demo-mint-component-audit/index.ts",
+        "content": "import { getFile } from '../../core/figma-api/figma-api.js';\nimport { getPagesInFile, getTopLevelFramesInPage } from '../../core/traversal/traversal.js';\nimport { scanMintInstancesInFrame } from './analyze.js';\nimport 'dotenv/config';\n\nconst FILE_KEY = process.env.TEST_FILE_KEY;\n\n(async () => {\n  if (!FILE_KEY) {\n    console.error('❌ TEST_FILE_KEY missing in .env');\n    process.exit(1);\n  }\n\n  try {\n    const file = await getFile(FILE_KEY);\n    const pages = getPagesInFile(file);\n\n    console.log(`✅ Analyzing ${pages.length} page(s)...\\n`);\n\n    for (const page of pages) {\n      const frames = getTopLevelFramesInPage(page);\n      console.log(`📄 Page: ${page.name} → ${frames.length} frame(s)`);\n\n      for (const frame of frames) {\n        const report = scanMintInstancesInFrame(frame);\n        console.log(`  🖼 Frame: ${frame.name}`);\n\n        if (report.length === 0) {\n          console.log('    ⚠️  No Mint components found.');\n        } else {\n          const summary = report.reduce((acc, item) => {\n            acc[item.componentName] = (acc[item.componentName] || 0) + 1;\n            return acc;\n          }, {});\n\n          for (const [name, count] of Object.entries(summary)) {\n            console.log(`    ✅ ${name} × ${count}`);\n          }\n        }\n      }\n    }\n  } catch (err) {\n    console.error('❌ Error in plugin:', err);\n  }\n})();"
       },
       {
-        "path": "scripts/test-page-frame-traversal.ts",
-        "content": "import { getFile } from '../core/figma-api/figma-api.js';\nimport { getPagesInFile, getTopLevelFramesInPage } from '../core/traversal/traversal.js';\nimport 'dotenv/config';\n\nconst FILE_KEY = process.env.TEST_FILE_KEY;\n\n(async () => {\n  if (!FILE_KEY) {\n    console.error('❌ TEST_FILE_KEY missing in .env');\n    process.exit(1);\n  }\n\n  try {\n    const file = await getFile(FILE_KEY);\n    const pages = getPagesInFile(file);\n\n    console.log(`✅ File has ${pages.length} page(s):`);\n    pages.forEach((page, i) => {\n      const frames = getTopLevelFramesInPage(page);\n      console.log(`- Page ${i + 1}: ${page.name} → ${frames.length} top-level frames`);\n      frames.forEach(frame => console.log(`  • ${frame.name} (${frame.id})`));\n    });\n  } catch (err) {\n    console.error('❌ Error traversing pages and frames:', err);\n  }\n})();"
+        "path": "plugins/demo-mint-component-audit/analyze.ts",
+        "content": "import { isMintInstance } from './helpers.js';\n\nexport function scanMintInstancesInFrame(frameNode) {\n  const results = [];\n\n  function walk(node) {\n    if (isMintInstance(node)) {\n      results.push({\n        id: node.id,\n        name: node.name,\n        componentName: node.componentName || '[Unnamed]'\n      });\n    }\n\n    if (node.children && Array.isArray(node.children)) {\n      node.children.forEach(walk);\n    }\n  }\n\n  walk(frameNode);\n  return results;\n}"
+      },
+      {
+        "path": "plugins/demo-mint-component-audit/helpers.ts",
+        "content": "export function isMintInstance(node) {\n  return (\n    node.type === 'INSTANCE' &&\n    typeof node.componentName === 'string' &&\n    node.componentName.toLowerCase().includes('mint')\n  );\n}"
       }
     ],
-    "commitMessage": "[Milestone] Add page and frame traversal functions to traversal module"
+    "commitMessage": "[Milestone] Scaffold demo-mint-component-audit plugin to scan Mint component usage"
   }
   
