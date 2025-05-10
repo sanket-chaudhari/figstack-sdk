@@ -4,6 +4,7 @@ import path from 'path';
 import 'dotenv/config';
 
 const FILE_KEY = process.env.TEST_FILE_KEY;
+const PAGE_NAME = process.env.TEST_PAGE_NAME || 'Master';
 
 (async () => {
   if (!FILE_KEY) {
@@ -12,7 +13,7 @@ const FILE_KEY = process.env.TEST_FILE_KEY;
   }
 
   try {
-    const fileData = await getSnapshot({ fileKey: FILE_KEY });
+    const fileData = await getSnapshot({ fileKey: FILE_KEY, pageName: PAGE_NAME });
 
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
     const safeFileName = fileData.name.replace(/[^a-zA-Z0-9_-]/g, '-');

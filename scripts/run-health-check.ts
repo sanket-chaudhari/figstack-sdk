@@ -14,18 +14,17 @@ const snapshotDir = path.join('plugins', 'demo-mint-component-audit', 'snapshots
   console.log('🩺 Running Design Infra Health Check...');
 
   // Step 1: Fetch fresh snapshot
-  await loadingStep('🔍 Fetching fresh snapshot', async () => {
+  const freshPath = await loadingStep('🔍 Fetching fresh snapshot', async () => {
     const fresh = await getSnapshot({ fileKey: FILE_KEY, pageName: PAGE_NAME });
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
     const safeName = fresh.name.replace(/[^a-zA-Z0-9_-]/g, '-');
-    const freshPath = path.join(snapshotDir, `__temp__snapshot--${safeName}--${timestamp}.json`);
+    const tempPath = path.join(snapshotDir, `__temp__snapshot--${safeName}--${timestamp}.json`);
     await fs.ensureDir(snapshotDir);
-    await fs.writeJson(freshPath, fresh, { spaces: 2 });
-    return freshPath;
+    await fs.writeJson(tempPath, fresh, { spaces: 2 });
+    return tempPath;
   });
 
   // Step 2: Compare with last snapshot
-  const freshPath = await findLatestTempFile(snapshotDir);
   let lastPath = null;
   let usedFallback = false;
 
@@ -46,8 +45,8 @@ const snapshotDir = path.join('plugins', 'demo-mint-component-audit', 'snapshots
   await fs.remove(freshPath);
 
   // Final Report
-  console.log('\n📁 File:', FILE_KEY);
-  console.log('📄 Page:', PAGE_NAME);
+  console.log('\n📁 File Key:', FILE_KEY);
+  console.log('📄 Page Name:', PAGE_NAME);
   console.log('📅 Time:', new Date().toLocaleString());
   console.log('\n✅ Health check complete.\n');
 })();
