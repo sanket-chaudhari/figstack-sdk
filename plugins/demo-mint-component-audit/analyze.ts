@@ -1,18 +1,21 @@
-import { classifyResolvedName } from './helpers.js';
+export function logFileDefinedComponents(componentsById) {
+  const entries = Object.entries(componentsById);
+  if (entries.length === 0) {
+    console.log('  (none found)');
+    return;
+  }
 
-export function logAllComponentInstancesInFrame(frameNode, componentsById) {
+  for (const [id, def] of entries) {
+    console.log(`  - ${def.name} (id: ${id})`);
+  }
+}
+
+export function logInstanceUsageAcrossFrames(frameNode, componentsById) {
   function walk(node) {
     if (node.type === 'INSTANCE') {
-      const componentId = node.componentId;
-      const resolved = componentsById?.[componentId]?.name || '[Unknown]';
-      const classification = classifyResolvedName(resolved);
-
-      console.log(`    • Instance ID: ${node.id}`);
-      console.log(`      ↳ Component ID: ${componentId}`);
-      console.log(`      ↳ Resolved Name: ${resolved}`);
-      console.log(`      ↳ Classification: ${classification}\n`);
+      const resolved = componentsById?.[node.componentId]?.name || '[Unknown]';
+      console.log(`    • Uses: ${resolved} (componentId: ${node.componentId})`);
     }
-
     if (node.children && Array.isArray(node.children)) {
       node.children.forEach(walk);
     }
