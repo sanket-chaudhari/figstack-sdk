@@ -12,17 +12,18 @@ export function parseFigmaUrl(url: string) {
 
   try {
     const urlObj = new URL(url);
-    const [,, prefix, fileKey] = urlObj.pathname.split('/');
+    const pathParts = urlObj.pathname.split('/').filter(Boolean);
 
-    const reconstructed = '/' + prefix + '/';
-
-    if (!ALLOWED_PREFIXES.includes(reconstructed)) {
-      result.error = `Unsupported Figma link pattern: ${reconstructed}\n\nWe currently support the following patterns:\n  ${ALLOWED_PREFIXES.join(', ')}\n\nIf you believe this pattern should be supported, feel free to explore our contribution guidelines —\nor reach out to the system maintainer to discuss support for this use case.`;
+    if (pathParts.length < 2) {
+      result.error = 'Invalid Figma URL: missing expected path structure.';
       return result;
     }
 
-    if (!fileKey) {
-      result.error = 'Missing fileKey from path';
+    const prefix = '/' + pathParts[0] + '/';
+    const fileKey = pathParts[1];
+
+    if (!ALLOWED_PREFIXES.includes(prefix)) {
+      result.error = `Unsupported Figma link pattern: ${prefix}\n\nWe currently support the following patterns:\n  ${ALLOWED_PREFIXES.join(', ')}\n\nIf you believe this pattern should be supported, feel free to explore our contribution guidelines —\nor reach out to the system maintainer to discuss support for this use case.`;
       return result;
     }
 
@@ -32,7 +33,6 @@ export function parseFigmaUrl(url: string) {
     result.branchId = urlObj.searchParams.get('branch-id') || undefined;
     result.isValid = true;
     return result;
-
   } catch (err) {
     result.error = 'Malformed or unsupported URL structure';
     return result;
