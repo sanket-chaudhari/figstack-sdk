@@ -1,0 +1,7 @@
+🧪 Design Infra Diagnostic Log
+==============================
+
+✅ FIGMA_PERSONAL_ACCESS_TOKEN is present
+❌ Scope resolution failed: Page "↳  Showreel" not found in file "Neptune Release". Available pages: "✅ Hand off", "✅ Assets", "······························", "▶️ Reviews", "       ↳  PPR_01 March_Deck", "       ↳ PPR_01 March_Prototype", "······························", "🚧 Explorations", "       ↳ Explorations-Landing page", "       ↳ Explorations-23 Feb Onwards", "       ↳ Explorations- BBPS framework", "       ↳ Explorations-transaction history", "       ↳  Explorations ", "       ↳  Explorations-Search", "       ↳  Explorations-onboarding", "       ↳  Explorations-rewards & referrals", "       ↳  Explorations-rewards ", "       ↳  Explorations-ipo mandate", "       ↳  Explorations-fastag fetch", "       ↳  Proto", "       ↳  protopie", "       ↳  Showreel", "······························", "💠 Local components -  do not refer for development", "🎆 Cover"
+
+Logged at: 5/10/2025, 8:06:48 PM
