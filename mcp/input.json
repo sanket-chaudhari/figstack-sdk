@@ -1,10 +1,18 @@
 {
     "files": [
       {
-        "path": "services/sample.js",
-        "content": "// Sample service\nconsole.log('Hello MCP!');\n"
+        "path": "core/auth/auth.ts",
+        "content": "import dotenv from 'dotenv';\ndotenv.config();\n\nexport function getAuthHeaders(): Record<string, string> {\n  const token = process.env.FIGMA_PERSONAL_ACCESS_TOKEN;\n\n  if (!token || token.trim() === '') {\n    throw new Error('FIGMA_PERSONAL_ACCESS_TOKEN not found in .env');\n  }\n\n  return {\n    'X-Figma-Token': token,\n  };\n}"
+      },
+      {
+        "path": ".env.example",
+        "content": "# Copy this file to .env and paste your actual Figma token below\nFIGMA_PERSONAL_ACCESS_TOKEN=your-token-goes-here"
+      },
+      {
+        "path": "scripts/test-auth.ts",
+        "content": "import { getAuthHeaders } from '../core/auth/auth';\n\ntry {\n  const headers = getAuthHeaders();\n  console.log('✅ Auth headers generated successfully:', headers);\n} catch (err) {\n  console.error('❌ Error generating auth headers:', (err as Error).message);\n}"
       }
     ],
-    "commitMessage": "chore: add sample service file"
+    "commitMessage": "Add core auth module with token loader and test script"
   }
-  
+
