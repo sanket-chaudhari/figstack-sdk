@@ -4,14 +4,21 @@ import { resolveScope } from '../core/scope/resolveScope.js';
 
 const inputUrl = process.argv[2];
 const shouldResolve = process.argv.includes('--resolve');
+const asJson = process.argv.includes('--json');
 
 if (!inputUrl) {
   console.error('❌ Please provide a Figma URL as an argument.');
   process.exit(1);
 }
 
-console.log('📦 Parsed URL:');
 const parsed = parseFigmaUrl(inputUrl);
+
+if (asJson) {
+  console.log(JSON.stringify(parsed, null, 2));
+  process.exit(0);
+}
+
+console.log('📦 Parsed URL:');
 
 if (!parsed.isValid) {
   console.error(`❌ Invalid Figma URL → ${parsed.error}`);
@@ -26,21 +33,16 @@ if (parsed.branchId) console.log(`• branchId: ${parsed.branchId}`);
 if (shouldResolve) {
   console.log('\n🔍 Resolving from Figma...');
 
-  const scope = {
-    fileKey: parsed.fileKey,
-    nodeId: parsed.nodeId
-  };
-
-  resolveScope(scope).then(res => {
-    if (!res.valid) {
-      console.log(`❌ Resolution failed: ${res.error}`);
-    } else {
-      console.log(`• File name: “${res.fileName}”`);
-      if (res.diagnostics.nodeResolved) {
-        console.log(`• Node: “${res.diagnostics.nodeName}” [${res.diagnostics.nodeType}]`);
+  resolveScope({ fileKey: parsed.fileKey, nodeId: parsed.nodeId })
+    .then(res => {
+      if (!res.valid) {
+        console.log(`❌ Resolution failed: ${res.error}`);
+      } else {
+        console.log(`• File name: “${res.fileName}”`);
+        if (res.diagnostics.nodeResolved) {
+          console.log(`• Node: “${res.diagnostics.nodeName}” [${res.diagnostics.nodeType}]`);
+        }
       }
-    }
-  }).catch(err => {
-    console.error('❌ Error during resolution:', err.message);
-  });
+    })
+    .catch(err => console.error('❌ Error during resolution:', err.message));
 }
