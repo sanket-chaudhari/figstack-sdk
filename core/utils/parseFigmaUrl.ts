@@ -1,3 +1,5 @@
+const ALLOWED_PREFIXES = ['/file/', '/design/', '/proto/', '/embed/', '/present/', '/draft/'];
+
 export function parseFigmaUrl(url: string) {
   const result = {
     fileKey: null,
@@ -9,16 +11,18 @@ export function parseFigmaUrl(url: string) {
   };
 
   try {
-    const figmaBase = 'https://www.figma.com/file/';
-    if (!url.startsWith(figmaBase)) {
-      result.error = 'Not a valid Figma file URL';
+    const urlObj = new URL(url);
+    const [,, prefix, fileKey] = urlObj.pathname.split('/');
+
+    const reconstructed = '/' + prefix + '/';
+
+    if (!ALLOWED_PREFIXES.includes(reconstructed)) {
+      result.error = `Unsupported Figma link pattern: ${reconstructed}\n\nWe currently support the following patterns:\n  ${ALLOWED_PREFIXES.join(', ')}\n\nIf you believe this pattern should be supported, feel free to explore our contribution guidelines —\nor reach out to the system maintainer to discuss support for this use case.`;
       return result;
     }
 
-    const urlObj = new URL(url);
-    const [, , , fileKey] = urlObj.pathname.split('/');
     if (!fileKey) {
-      result.error = 'Missing file key';
+      result.error = 'Missing fileKey from path';
       return result;
     }
 
@@ -28,8 +32,9 @@ export function parseFigmaUrl(url: string) {
     result.branchId = urlObj.searchParams.get('branch-id') || undefined;
     result.isValid = true;
     return result;
+
   } catch (err) {
-    result.error = 'Malformed URL';
+    result.error = 'Malformed or unsupported URL structure';
     return result;
   }
 }
