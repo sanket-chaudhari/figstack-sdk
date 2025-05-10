@@ -1,18 +1,16 @@
-import { classifyInstance } from './helpers.js';
+import { classifyResolvedName } from './helpers.js';
 
-export function analyzeFrameComponentUsage(frameNode) {
-  const counts = {
-    mintCount: 0,
-    localCount: 0,
-    otherCount: 0,
-  };
-
+export function logAllComponentInstancesInFrame(frameNode, componentsById) {
   function walk(node) {
     if (node.type === 'INSTANCE') {
-      const category = classifyInstance(node);
-      if (category === 'mint') counts.mintCount++;
-      else if (category === 'local') counts.localCount++;
-      else counts.otherCount++;
+      const componentId = node.componentId;
+      const resolved = componentsById?.[componentId]?.name || '[Unknown]';
+      const classification = classifyResolvedName(resolved);
+
+      console.log(`    • Instance ID: ${node.id}`);
+      console.log(`      ↳ Component ID: ${componentId}`);
+      console.log(`      ↳ Resolved Name: ${resolved}`);
+      console.log(`      ↳ Classification: ${classification}\n`);
     }
 
     if (node.children && Array.isArray(node.children)) {
@@ -21,5 +19,4 @@ export function analyzeFrameComponentUsage(frameNode) {
   }
 
   walk(frameNode);
-  return counts;
 }

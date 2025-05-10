@@ -1,6 +1,6 @@
 import { getFile } from '../../core/figma-api/figma-api.js';
 import { getPagesInFile, getTopLevelFramesInPage } from '../../core/traversal/traversal.js';
-import { analyzeFrameComponentUsage } from './analyze.js';
+import { logAllComponentInstancesInFrame } from './analyze.js';
 import 'dotenv/config';
 
 const FILE_KEY = process.env.TEST_FILE_KEY;
@@ -14,6 +14,8 @@ const FILE_KEY = process.env.TEST_FILE_KEY;
   try {
     const file = await getFile(FILE_KEY);
     const pages = getPagesInFile(file);
+    const componentsById = file.components || {};
+
     console.log(`✅ Analyzing ${pages.length} page(s)...\n`);
 
     for (const page of pages) {
@@ -21,12 +23,8 @@ const FILE_KEY = process.env.TEST_FILE_KEY;
       console.log(`📄 Page: ${page.name} → ${frames.length} frame(s)`);
 
       for (const frame of frames) {
-        const report = analyzeFrameComponentUsage(frame);
         console.log(`  🖼 Frame: ${frame.name}`);
-
-        console.log(`    ✅ Mint components: ${report.mintCount}`);
-        console.log(`    🧩 Local components: ${report.localCount}`);
-        console.log(`    ⛔ Other component instances: ${report.otherCount}`);
+        logAllComponentInstancesInFrame(frame, componentsById);
       }
     }
   } catch (err) {

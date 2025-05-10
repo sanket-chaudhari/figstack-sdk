@@ -1,6 +1,6 @@
-export function classifyInstance(node) {
-  const name = node.componentName?.toLowerCase() || '';
-  if (name.includes('mint')) return 'mint';
-  if (name.includes('_local')) return 'local';
+export function classifyResolvedName(name) {
+  const lower = name.toLowerCase();
+  if (lower.includes('mint')) return 'mint';
+  if (lower.includes('_local')) return 'local';
   return 'other';
 }
