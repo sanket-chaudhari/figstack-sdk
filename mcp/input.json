@@ -1,0 +1,10 @@
+{
+    "files": [
+      {
+        "path": "services/sample.js",
+        "content": "// Sample service\nconsole.log('Hello MCP!');\n"
+      }
+    ],
+    "commitMessage": "chore: add sample service file"
+  }
+  
