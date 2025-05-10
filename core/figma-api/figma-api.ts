@@ -1,8 +1,8 @@
 import 'dotenv/config';
 
 export async function getFile(fileKey: string, nodeId?: string) {
-  const FIGMA_TOKEN = process.env.FIGMA_TOKEN;
-  if (!FIGMA_TOKEN) throw new Error('[figma-api] Missing FIGMA_TOKEN');
+  const FIGMA_TOKEN = process.env.FIGMA_PERSONAL_ACCESS_TOKEN;
+  if (!FIGMA_TOKEN) throw new Error('[figma-api] Missing FIGMA_PERSONAL_ACCESS_TOKEN');
 
   const url = nodeId
     ? `https://api.figma.com/v1/files/${fileKey}?ids=${encodeURIComponent(nodeId)}`
