@@ -1,18 +1,14 @@
 {
     "files": [
       {
-        "path": "core/auth/auth.ts",
-        "content": "import dotenv from 'dotenv';\ndotenv.config();\n\nexport function getAuthHeaders(): Record<string, string> {\n  const token = process.env.FIGMA_PERSONAL_ACCESS_TOKEN;\n\n  if (!token || token.trim() === '') {\n    throw new Error('FIGMA_PERSONAL_ACCESS_TOKEN not found in .env');\n  }\n\n  return {\n    'X-Figma-Token': token,\n  };\n}"
+        "path": "tsconfig.json",
+        "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2020\",\n    \"module\": \"ESNext\",\n    \"moduleResolution\": \"node\",\n    \"esModuleInterop\": true,\n    \"resolveJsonModule\": true,\n    \"allowImportingTsExtensions\": true,\n    \"strict\": true,\n    \"skipLibCheck\": true,\n    \"forceConsistentCasingInFileNames\": true\n  },\n  \"include\": [\"core\", \"plugins\", \"services\", \"scripts\"]\n}"
       },
       {
-        "path": ".env.example",
-        "content": "# Copy this file to .env and paste your actual Figma token below\nFIGMA_PERSONAL_ACCESS_TOKEN=your-token-goes-here"
-      },
-      {
-        "path": "scripts/test-auth.ts",
-        "content": "import { getAuthHeaders } from '../core/auth/auth';\n\ntry {\n  const headers = getAuthHeaders();\n  console.log('✅ Auth headers generated successfully:', headers);\n} catch (err) {\n  console.error('❌ Error generating auth headers:', (err as Error).message);\n}"
+        "path": "package.json",
+        "content": "{\n  \"name\": \"figma-tooling\",\n  \"version\": \"1.0.0\",\n  \"type\": \"module\",\n  \"scripts\": {\n    \"dev\": \"tsx scripts/test-auth.ts\"\n  },\n  \"dependencies\": {\n    \"dotenv\": \"^16.5.0\"\n  },\n  \"devDependencies\": {\n    \"tsx\": \"^4.7.0\",\n    \"typescript\": \"^5.3.3\"\n  }\n}"
       }
     ],
-    "commitMessage": "Add core auth module with token loader and test script"
+    "commitMessage": "Clean up: switch to tsx, add tsconfig, remove ts-node setup"
   }
-
+  
