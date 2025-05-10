@@ -8,6 +8,7 @@ import 'dotenv/config';
 const delay = (ms) => new Promise(res => setTimeout(res, ms));
 const FILE_KEY = process.env.TEST_FILE_KEY;
 const PAGE_NAME = process.env.TEST_PAGE_NAME || 'Master';
+const NODE_ID = process.env.TEST_NODE_ID;
 const snapshotDir = path.join('plugins', 'demo-mint-component-audit', 'snapshots');
 
 (async () => {
@@ -15,7 +16,7 @@ const snapshotDir = path.join('plugins', 'demo-mint-component-audit', 'snapshots
 
   // Step 1: Fetch fresh snapshot
   const freshPath = await loadingStep('🔍 Fetching fresh snapshot', async () => {
-    const fresh = await getSnapshot({ fileKey: FILE_KEY, pageName: PAGE_NAME });
+    const fresh = await getSnapshot({ fileKey: FILE_KEY, pageName: PAGE_NAME, nodeId: NODE_ID });
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
     const safeName = fresh.name.replace(/[^a-zA-Z0-9_-]/g, '-');
     const tempPath = path.join(snapshotDir, `__temp__snapshot--${safeName}--${timestamp}.json`);
@@ -47,6 +48,7 @@ const snapshotDir = path.join('plugins', 'demo-mint-component-audit', 'snapshots
   // Final Report
   console.log('\n📁 File Key:', FILE_KEY);
   console.log('📄 Page Name:', PAGE_NAME);
+  console.log('🔖 Node ID:', NODE_ID || '(not scoped)');
   console.log('📅 Time:', new Date().toLocaleString());
   console.log('\n✅ Health check complete.\n');
 })();

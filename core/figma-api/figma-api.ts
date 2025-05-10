@@ -1,27 +1,22 @@
-import { getAuthHeaders } from '../auth/auth.js';
+import 'dotenv/config';
 
-const BASE_URL = 'https://api.figma.com/v1';
+export async function getFile(fileKey: string, nodeId?: string) {
+  const FIGMA_TOKEN = process.env.FIGMA_TOKEN;
+  if (!FIGMA_TOKEN) throw new Error('[figma-api] Missing FIGMA_TOKEN');
 
-export async function getTeamProjects(teamId) {
-  const res = await fetch(`${BASE_URL}/teams/${teamId}/projects`, {
-    headers: getAuthHeaders(),
+  const url = nodeId
+    ? `https://api.figma.com/v1/files/${fileKey}?ids=${encodeURIComponent(nodeId)}`
+    : `https://api.figma.com/v1/files/${fileKey}`;
+
+  const res = await fetch(url, {
+    headers: {
+      'X-Figma-Token': FIGMA_TOKEN,
+    },
   });
-  if (!res.ok) throw new Error(`Failed to fetch team projects: ${res.status}`);
-  return res.json();
-}
 
-export async function getProjectFiles(projectId) {
-  const res = await fetch(`${BASE_URL}/projects/${projectId}/files`, {
-    headers: getAuthHeaders(),
-  });
-  if (!res.ok) throw new Error(`Failed to fetch project files: ${res.status}`);
-  return res.json();
-}
+  if (!res.ok) {
+    throw new Error(`[figma-api] Failed to fetch file data: ${res.status}`);
+  }
 
-export async function getFile(fileKey) {
-  const res = await fetch(`${BASE_URL}/files/${fileKey}`, {
-    headers: getAuthHeaders(),
-  });
-  if (!res.ok) throw new Error(`Failed to fetch file data: ${res.status}`);
-  return res.json();
+  return await res.json();
 }

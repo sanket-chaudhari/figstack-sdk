@@ -5,7 +5,7 @@ export async function getSnapshot(scope) {
     throw new Error('[snapshot-service] Missing scope. You must provide a scope object when requesting a snapshot.');
   }
 
-  const { fileKey, pageName, teamId, projectId, frameIds } = scope;
+  const { fileKey, pageName, teamId, projectId, frameIds, nodeId } = scope;
 
   if (!fileKey && !teamId && !projectId) {
     throw new Error('[snapshot-service] Invalid scope: You must provide at least a fileKey, teamId, or projectId.');
@@ -15,12 +15,13 @@ export async function getSnapshot(scope) {
     throw new Error('[snapshot-service] Snapshot fetching for non-file scopes (like team/project) is not yet implemented.');
   }
 
-  const file = await getFile(fileKey);
+  const file = await getFile(fileKey, nodeId);
 
   if (pageName) {
     const matchingPages = file.document.children.filter(p => p.name === pageName);
     if (matchingPages.length === 0) {
-      throw new Error(`[snapshot-service] Page "${pageName}" not found in file: ${file.name}`);
+      const available = file.document.children.map(p => `"${p.name}"`).join(', ');
+      throw new Error(`[snapshot-service] Page "${pageName}" not found in file: ${file.name}. Available: ${available}`);
     }
     file.document.children = matchingPages;
   }
