@@ -1,14 +1,18 @@
 {
     "files": [
       {
-        "path": "tsconfig.json",
-        "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2020\",\n    \"module\": \"ESNext\",\n    \"moduleResolution\": \"node\",\n    \"esModuleInterop\": true,\n    \"resolveJsonModule\": true,\n    \"allowImportingTsExtensions\": true,\n    \"strict\": true,\n    \"skipLibCheck\": true,\n    \"forceConsistentCasingInFileNames\": true\n  },\n  \"include\": [\"core\", \"plugins\", \"services\", \"scripts\"]\n}"
+        "path": "core/figma-api/figma-api.ts",
+        "content": "import { getAuthHeaders } from '../auth/auth.js';\n\nconst BASE_URL = 'https://api.figma.com/v1';\n\nexport async function getTeamProjects(teamId) {\n  const res = await fetch(`${BASE_URL}/teams/${teamId}/projects`, {\n    headers: getAuthHeaders(),\n  });\n  if (!res.ok) throw new Error(`Failed to fetch team projects: ${res.status}`);\n  return res.json();\n}\n\nexport async function getProjectFiles(projectId) {\n  const res = await fetch(`${BASE_URL}/projects/${projectId}/files`, {\n    headers: getAuthHeaders(),\n  });\n  if (!res.ok) throw new Error(`Failed to fetch project files: ${res.status}`);\n  return res.json();\n}\n\nexport async function getFile(fileKey) {\n  const res = await fetch(`${BASE_URL}/files/${fileKey}`, {\n    headers: getAuthHeaders(),\n  });\n  if (!res.ok) throw new Error(`Failed to fetch file data: ${res.status}`);\n  return res.json();\n}"
       },
       {
-        "path": "package.json",
-        "content": "{\n  \"name\": \"figma-tooling\",\n  \"version\": \"1.0.0\",\n  \"type\": \"module\",\n  \"scripts\": {\n    \"dev\": \"tsx scripts/test-auth.ts\"\n  },\n  \"dependencies\": {\n    \"dotenv\": \"^16.5.0\"\n  },\n  \"devDependencies\": {\n    \"tsx\": \"^4.7.0\",\n    \"typescript\": \"^5.3.3\"\n  }\n}"
+        "path": "scripts/test-figma-api.ts",
+        "content": "import { getTeamProjects, getProjectFiles, getFile } from '../core/figma-api/figma-api.js';\nimport 'dotenv/config';\n\nconst TEAM_ID = process.env.TEST_TEAM_ID;\nconst PROJECT_ID = process.env.TEST_PROJECT_ID;\nconst FILE_KEY = process.env.TEST_FILE_KEY;\n\n(async () => {\n  try {\n    if (TEAM_ID) {\n      const projects = await getTeamProjects(TEAM_ID);\n      console.log('✅ Team Projects:', projects);\n    }\n\n    if (PROJECT_ID) {\n      const files = await getProjectFiles(PROJECT_ID);\n      console.log('✅ Project Files:', files);\n    }\n\n    if (FILE_KEY) {\n      const file = await getFile(FILE_KEY);\n      console.log('✅ File Data:', file.name, '-', file.document.children?.length, 'pages');\n    }\n  } catch (err) {\n    console.error('❌ API Error:', err);\n  }\n})();"
+      },
+      {
+        "path": ".env.example",
+        "content": "FIGMA_PERSONAL_ACCESS_TOKEN=your-token-here\nTEST_TEAM_ID=optional-team-id\nTEST_PROJECT_ID=optional-project-id\nTEST_FILE_KEY=optional-file-key"
       }
     ],
-    "commitMessage": "Clean up: switch to tsx, add tsconfig, remove ts-node setup"
+    "commitMessage": "Add figma-api module with basic team/project/file API wrappers and test script"
   }
   
