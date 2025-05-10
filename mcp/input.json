@@ -1,14 +1,14 @@
 {
     "files": [
       {
-        "path": "services/snapshot-service/getSnapshot.ts",
-        "content": "import { getFile } from '../../core/figma-api/figma-api.js';\n\n/**\n * Returns the full raw Figma file JSON response for a given fileKey\n */\nexport async function getSnapshot({ fileKey }) {\n  if (!fileKey || typeof fileKey !== 'string') {\n    throw new Error('fileKey is required to getSnapshot');\n  }\n\n  const file = await getFile(fileKey);\n  return file;\n}"
+        "path": "core/utils/resolveLatestSnapshot.ts",
+        "content": "import fs from 'fs-extra';\nimport path from 'path';\n\n/**\n * Resolves the most recent snapshot file in a given folder.\n * Expects snapshot files to follow this format:\n *    snapshot--<context>--<timestamp>.json\n */\nexport async function resolveLatestSnapshot(folderPath: string): Promise<string> {\n  const files = await fs.readdir(folderPath);\n  const snapshotFiles = files.filter(f => f.startsWith('snapshot--') && f.endsWith('.json'));\n\n  if (snapshotFiles.length === 0) {\n    throw new Error(`No snapshot files found in: ${folderPath}`);\n  }\n\n  const sorted = snapshotFiles.sort((a, b) => {\n    const aTime = extractTimestamp(a);\n    const bTime = extractTimestamp(b);\n    return bTime.localeCompare(aTime); // descending\n  });\n\n  return path.join(folderPath, sorted[0]);\n}\n\nfunction extractTimestamp(filename: string): string {\n  const match = filename.match(/--(\\d{4}-\\d{2}-\\d{2}[^.]+)\\.json$/);\n  if (!match) return '';\n  return match[1];\n}"
       },
       {
-        "path": "plugins/demo-mint-component-audit/generate-snapshot.ts",
-        "content": "import { getSnapshot } from '../../services/snapshot-service/getSnapshot.js';\nimport fs from 'fs-extra';\nimport path from 'path';\nimport 'dotenv/config';\n\nconst FILE_KEY = process.env.TEST_FILE_KEY;\n\n(async () => {\n  if (!FILE_KEY) {\n    console.error('❌ TEST_FILE_KEY not set in .env');\n    process.exit(1);\n  }\n\n  try {\n    const fileData = await getSnapshot({ fileKey: FILE_KEY });\n\n    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');\n    const safeFileName = fileData.name.replace(/[^a-zA-Z0-9_-]/g, '-');\n    const filename = `snapshot--${safeFileName}--${timestamp}.json`;\n    const outputPath = path.join('plugins', 'demo-mint-component-audit', 'snapshots', filename);\n\n    await fs.ensureDir(path.dirname(outputPath));\n    await fs.writeJson(outputPath, fileData, { spaces: 2 });\n\n    console.log(`✅ Snapshot saved to: ${outputPath}`);\n  } catch (err) {\n    console.error('❌ Failed to generate snapshot:', err);\n  }\n})();"
+        "path": "plugins/demo-mint-component-audit/generate-report.ts",
+        "content": "import fs from 'fs-extra';\nimport path from 'path';\nimport { resolveLatestSnapshot } from '../../core/utils/resolveLatestSnapshot.js';\nimport 'dotenv/config';\n\n(async () => {\n  const snapshotDir = path.join('plugins', 'demo-mint-component-audit', 'snapshots');\n  const snapshotPath = await resolveLatestSnapshot(snapshotDir);\n  const file = await fs.readJson(snapshotPath);\n\n  // From here on, you can analyze `file` like before\n  console.log(`✅ Using latest snapshot: ${snapshotPath}`);\n\n  // Example minimal output\n  console.log(`File contains ${file.document.children?.length || 0} top-level canvas nodes.`);\n  // Replace this block with your actual report generator\n})();"
       }
     ],
-    "commitMessage": "Add snapshot-service and scoped snapshot writer for demo plugin"
+    "commitMessage": "Add resolveLatestSnapshot utility and integrate into demo plugin report"
   }
   
