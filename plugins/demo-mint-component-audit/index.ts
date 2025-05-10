@@ -1,6 +1,6 @@
 import { getFile } from '../../core/figma-api/figma-api.js';
 import { getPagesInFile, getTopLevelFramesInPage } from '../../core/traversal/traversal.js';
-import { scanMintInstancesInFrame } from './analyze.js';
+import { analyzeFrameComponentUsage } from './analyze.js';
 import 'dotenv/config';
 
 const FILE_KEY = process.env.TEST_FILE_KEY;
@@ -14,7 +14,6 @@ const FILE_KEY = process.env.TEST_FILE_KEY;
   try {
     const file = await getFile(FILE_KEY);
     const pages = getPagesInFile(file);
-
     console.log(`✅ Analyzing ${pages.length} page(s)...\n`);
 
     for (const page of pages) {
@@ -22,21 +21,12 @@ const FILE_KEY = process.env.TEST_FILE_KEY;
       console.log(`📄 Page: ${page.name} → ${frames.length} frame(s)`);
 
       for (const frame of frames) {
-        const report = scanMintInstancesInFrame(frame);
+        const report = analyzeFrameComponentUsage(frame);
         console.log(`  🖼 Frame: ${frame.name}`);
 
-        if (report.length === 0) {
-          console.log('    ⚠️  No Mint components found.');
-        } else {
-          const summary = report.reduce((acc, item) => {
-            acc[item.componentName] = (acc[item.componentName] || 0) + 1;
-            return acc;
-          }, {});
-
-          for (const [name, count] of Object.entries(summary)) {
-            console.log(`    ✅ ${name} × ${count}`);
-          }
-        }
+        console.log(`    ✅ Mint components: ${report.mintCount}`);
+        console.log(`    🧩 Local components: ${report.localCount}`);
+        console.log(`    ⛔ Other component instances: ${report.otherCount}`);
       }
     }
   } catch (err) {

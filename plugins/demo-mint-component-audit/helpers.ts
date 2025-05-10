@@ -1,7 +1,6 @@
-export function isMintInstance(node) {
-  return (
-    node.type === 'INSTANCE' &&
-    typeof node.componentName === 'string' &&
-    node.componentName.toLowerCase().includes('mint')
-  );
+export function classifyInstance(node) {
+  const name = node.componentName?.toLowerCase() || '';
+  if (name.includes('mint')) return 'mint';
+  if (name.includes('_local')) return 'local';
+  return 'other';
 }
