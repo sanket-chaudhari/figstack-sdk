@@ -2,13 +2,13 @@
     "files": [
       {
         "path": "core/traversal/traversal.ts",
-        "content": "import { getTeamProjects, getProjectFiles } from '../figma-api/figma-api.js';\n\n/**\n * Fetch all files across all projects within a given Figma team.\n */\nexport async function getAllFilesInTeam(teamId) {\n  const projectsResponse = await getTeamProjects(teamId);\n  const projects = projectsResponse.projects ?? [];\n\n  const allFiles = [];\n\n  for (const project of projects) {\n    const filesResponse = await getProjectFiles(project.id);\n    const files = filesResponse.files ?? [];\n\n    for (const file of files) {\n      allFiles.push({\n        name: file.name,\n        key: file.key,\n        projectId: project.id\n      });\n    }\n  }\n\n  return allFiles;\n}"
+        "content": "import { getTeamProjects, getProjectFiles, getFile } from '../figma-api/figma-api.js';\n\nexport async function getAllFilesInTeam(teamId) {\n  const projectsResponse = await getTeamProjects(teamId);\n  const projects = projectsResponse.projects ?? [];\n  const allFiles = [];\n\n  for (const project of projects) {\n    const filesResponse = await getProjectFiles(project.id);\n    const files = filesResponse.files ?? [];\n    for (const file of files) {\n      allFiles.push({ name: file.name, key: file.key, projectId: project.id });\n    }\n  }\n\n  return allFiles;\n}\n\n/**\n * Extract all top-level pages from a given Figma file response\n */\nexport function getPagesInFile(file) {\n  return file.document?.children ?? [];\n}\n\n/**\n * Given a page node, return all top-level FRAME nodes inside it\n */\nexport function getTopLevelFramesInPage(pageNode) {\n  return (pageNode.children ?? []).filter(node => node.type === 'FRAME');\n}"
       },
       {
-        "path": "scripts/test-traversal.ts",
-        "content": "import { getAllFilesInTeam } from '../core/traversal/traversal.js';\nimport 'dotenv/config';\n\nconst TEAM_ID = process.env.TEST_TEAM_ID;\n\n(async () => {\n  if (!TEAM_ID) {\n    console.error('❌ TEST_TEAM_ID is missing in .env');\n    process.exit(1);\n  }\n\n  try {\n    const files = await getAllFilesInTeam(TEAM_ID);\n    console.log(`✅ Found ${files.length} files:`);\n    files.forEach(file => {\n      console.log(`- ${file.name} (${file.key})`);\n    });\n  } catch (err) {\n    console.error('❌ Error during traversal:', err);\n  }\n})();"
+        "path": "scripts/test-page-frame-traversal.ts",
+        "content": "import { getFile } from '../core/figma-api/figma-api.js';\nimport { getPagesInFile, getTopLevelFramesInPage } from '../core/traversal/traversal.js';\nimport 'dotenv/config';\n\nconst FILE_KEY = process.env.TEST_FILE_KEY;\n\n(async () => {\n  if (!FILE_KEY) {\n    console.error('❌ TEST_FILE_KEY missing in .env');\n    process.exit(1);\n  }\n\n  try {\n    const file = await getFile(FILE_KEY);\n    const pages = getPagesInFile(file);\n\n    console.log(`✅ File has ${pages.length} page(s):`);\n    pages.forEach((page, i) => {\n      const frames = getTopLevelFramesInPage(page);\n      console.log(`- Page ${i + 1}: ${page.name} → ${frames.length} top-level frames`);\n      frames.forEach(frame => console.log(`  • ${frame.name} (${frame.id})`));\n    });\n  } catch (err) {\n    console.error('❌ Error traversing pages and frames:', err);\n  }\n})();"
       }
     ],
-    "commitMessage": "[Milestone] Add getAllFilesInTeam to traversal module with test script"
+    "commitMessage": "[Milestone] Add page and frame traversal functions to traversal module"
   }
   
