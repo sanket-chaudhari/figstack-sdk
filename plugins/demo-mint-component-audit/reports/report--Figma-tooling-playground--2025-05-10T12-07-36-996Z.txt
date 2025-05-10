@@ -1,0 +1,83 @@
+📘 Figma System Usage Report
+============================
+
+📌 File Metadata:
+----------------
+• File Name: Figma tooling playground
+• File Key: 5PuTdRnbbk44cirLaiMpCk
+• Team ID: 1089120139495056070
+• Generated: 5/10/2025, 5:37:36 PM
+
+------------------------------------------------------------
+📦 Components Defined in File
+------------------------------------------------------------
+
+• mint/button
+    ↳ Component Set with variants
+• mint/badge
+    ↳ Component Set with variants
+• _local/oc-chip
+    ↳ Component Set with variants
+
+📝 Total components defined: 3
+
+------------------------------------------------------------
+🔍 Instance Usage Across Pages and Frames
+------------------------------------------------------------
+
+Page: 💪 Master
+  Frame: frame-1
+    • colour=red, size=large [button-label#3:0=This is lorem text field., colour=red, size=large]
+Page: 💪 Master
+  Frame: frame-1
+    • colour=green, size=medium [button-label#3:0=This is lorem text field., colour=green, size=medium]
+Page: 💪 Master
+  Frame: frame-1
+    • type=outline [button-label#3:0=Haha, type=outline]
+Page: 💪 Master
+  Frame: frame-1
+    • type=filled [button-label#3:0=Chip, type=filled]
+Page: 💪 Master
+  Frame: frame-2
+    • colour=red, size=large [button-label#3:0=This is lorem text field., colour=red, size=large]
+Page: 💪 Master
+  Frame: frame-2
+    • colour=green, size=medium [button-label#3:0=This is lorem text field., colour=green, size=medium]
+Page: 💪 Master
+  Frame: frame-2
+    • type=outline [button-label#3:0=Haha, type=outline]
+Page: 💪 Master
+  Frame: frame-2
+    • type=filled [button-label#3:0=Chip, type=filled]
+
+------------------------------------------------------------
+🧬 Variant Usage Summary
+------------------------------------------------------------
+
+Component: colour=red, size=large
+  • button-label#3:0=This is lorem text field. → 2 use(s)
+  • colour=red → 2 use(s)
+  • size=large → 2 use(s)
+
+Component: colour=green, size=medium
+  • button-label#3:0=This is lorem text field. → 2 use(s)
+  • colour=green → 2 use(s)
+  • size=medium → 2 use(s)
+
+Component: type=outline
+  • button-label#3:0=Haha → 2 use(s)
+  • type=outline → 2 use(s)
+
+Component: type=filled
+  • button-label#3:0=Chip → 2 use(s)
+  • type=filled → 2 use(s)
+
+------------------------------------------------------------
+🚨 Observations
+------------------------------------------------------------
+
+• All tracked variants had some usage.
+• No local components detected in usage.
+
+------------------------------------------------------------
+✅ Report generated: 5/10/2025, 5:37:37 PM

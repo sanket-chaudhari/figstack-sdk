@@ -1,0 +1,109 @@
+📘 Figma System Usage Report
+============================
+
+📌 File Metadata:
+----------------
+• File Name: Figma tooling playground
+• File Key: (hidden)
+• Team ID: (hidden)
+• Generated: 5/10/2025, 5:53:41 PM
+
+------------------------------------------------------------
+🔍 Component Usage by Set & Variant
+------------------------------------------------------------
+
+Component: mint/button
+  ↳ Variant: colour=red, size=large
+  ↳ Used in: 💪 Master / frame-1
+      • (no overrides)
+  ↳ Used in: 💪 Master / frame-2
+      • override id: 3:68
+        {
+  "id": "3:68",
+  "overriddenFields": [
+    "fills"
+  ]
+}
+
+Component: mint/button
+  ↳ Variant: colour=green, size=medium
+  ↳ Used in: 💪 Master / frame-1
+      • override id: I3:41;3:10
+        {
+  "id": "I3:41;3:10",
+  "overriddenFields": [
+    "text",
+    "inheritTextStyleId"
+  ]
+}
+  ↳ Used in: 💪 Master / frame-2
+      • override id: I3:69;3:10
+        {
+  "id": "I3:69;3:10",
+  "overriddenFields": [
+    "text",
+    "inheritTextStyleId"
+  ]
+}
+
+Component: mint/badge
+  ↳ Variant: type=outline
+  ↳ Used in: 💪 Master / frame-1
+      • override id: 3:45
+        {
+  "id": "3:45",
+  "overriddenFields": [
+    "strokes"
+  ]
+}
+      • override id: I3:45;3:33
+        {
+  "id": "I3:45;3:33",
+  "overriddenFields": [
+    "fontWeight",
+    "fills",
+    "italic",
+    "lineHeightPercent",
+    "lineHeightPx",
+    "fontPostScriptName",
+    "lineHeightUnit",
+    "fontFamily",
+    "styleOverrideTable",
+    "letterSpacing",
+    "lineIndentations",
+    "lineTypes",
+    "openTypeFlags",
+    "lineHeightPercentFontSize",
+    "characterStyleOverrides",
+    "fontSize",
+    "boundVariables",
+    "inheritTextStyleId",
+    "text",
+    "textDecorationSkipInk",
+    "characters"
+  ]
+}
+  ↳ Used in: 💪 Master / frame-2
+      • (no overrides)
+
+Component: _local/oc-chip
+  ↳ Variant: type=filled
+  ↳ Used in: 💪 Master / frame-1
+      • (no overrides)
+  ↳ Used in: 💪 Master / frame-2
+      • (no overrides)
+
+------------------------------------------------------------
+📊 Insights
+------------------------------------------------------------
+
+• Total components used: 3
+• Total frames analyzed: 2
+• Total variant usages: 4
+
+✅ Component Adoption Table
+-----------------------------
+                    💪 Master / frame-1      💪 Master / frame-2      
+_local/oc-chip      🧩                       🧩                       
+mint/badge          🧩                       🧩                       
+mint/button         🧩                       🧩                       

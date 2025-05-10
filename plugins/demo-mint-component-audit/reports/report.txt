@@ -1,0 +1,32 @@
+📘 Figma System Usage Report
+============================
+
+📦 Components Defined in File:
+------------------------------
+- mint/button (type: COMPONENT_SET)
+- mint/badge (type: COMPONENT_SET)
+- _local/oc-chip (type: COMPONENT_SET)
+
+🔍 Instance Usage:
+------------------
+📄 💪 Master / 🖼 frame-1 → colour=red, size=large [button-label#3:0=This is lorem text field., colour=red, size=large]
+📄 💪 Master / 🖼 frame-1 → colour=green, size=medium [button-label#3:0=This is lorem text field., colour=green, size=medium]
+📄 💪 Master / 🖼 frame-1 → type=outline [button-label#3:0=Haha, type=outline]
+📄 💪 Master / 🖼 frame-1 → type=filled [button-label#3:0=Chip, type=filled]
+📄 💪 Master / 🖼 frame-2 → colour=red, size=large [button-label#3:0=This is lorem text field., colour=red, size=large]
+📄 💪 Master / 🖼 frame-2 → colour=green, size=medium [button-label#3:0=This is lorem text field., colour=green, size=medium]
+📄 💪 Master / 🖼 frame-2 → type=outline [button-label#3:0=Haha, type=outline]
+📄 💪 Master / 🖼 frame-2 → type=filled [button-label#3:0=Chip, type=filled]
+
+🧬 Variant Usage Summary:
+--------------------------
+- colour=red, size=large::button-label#3:0=This is lorem text field. → 2 use(s)
+- colour=red, size=large::colour=red → 2 use(s)
+- colour=red, size=large::size=large → 2 use(s)
+- colour=green, size=medium::button-label#3:0=This is lorem text field. → 2 use(s)
+- colour=green, size=medium::colour=green → 2 use(s)
+- colour=green, size=medium::size=medium → 2 use(s)
+- type=outline::button-label#3:0=Haha → 2 use(s)
+- type=outline::type=outline → 2 use(s)
+- type=filled::button-label#3:0=Chip → 2 use(s)
+- type=filled::type=filled → 2 use(s)

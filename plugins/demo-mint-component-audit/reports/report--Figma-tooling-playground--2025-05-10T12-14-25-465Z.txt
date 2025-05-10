@@ -1,0 +1,39 @@
+📘 Figma System Usage Report
+============================
+
+📌 File Metadata:
+----------------
+• File Name: Figma tooling playground
+• File Key: 5PuTdRnbbk44cirLaiMpCk
+• Team ID: 1089120139495056070
+• Generated: 5/10/2025, 5:44:25 PM
+
+------------------------------------------------------------
+🔍 Component Usage by Set & Variant
+------------------------------------------------------------
+
+Component: mint/button
+  ↳ Variant: colour=red, size=large
+  ↳ Used in: 💪 Master / frame-1
+  ↳ Used in: 💪 Master / frame-2
+      • 3:68 = undefined
+
+Component: mint/button
+  ↳ Variant: colour=green, size=medium
+  ↳ Used in: 💪 Master / frame-1
+      • I3:41;3:10 = undefined
+  ↳ Used in: 💪 Master / frame-2
+      • I3:69;3:10 = undefined
+
+Component: mint/badge
+  ↳ Variant: type=outline
+  ↳ Used in: 💪 Master / frame-1
+      • 3:45 = undefined
+      • I3:45;3:33 = undefined
+  ↳ Used in: 💪 Master / frame-2
+
+Component: _local/oc-chip
+  ↳ Variant: type=filled
+  ↳ Used in: 💪 Master / frame-1
+  ↳ Used in: 💪 Master / frame-2
+
