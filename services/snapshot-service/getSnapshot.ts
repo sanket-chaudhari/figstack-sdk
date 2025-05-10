@@ -1,9 +1,5 @@
 import { getFile } from '../../core/figma-api/figma-api.js';
 
-/**
- * Safely fetches a scoped snapshot from the Figma API.
- * Requires at least one of: fileKey, teamId, projectId, pageName, frameIds
- */
 export async function getSnapshot(scope) {
   if (!scope || typeof scope !== 'object') {
     throw new Error('[snapshot-service] Missing scope. You must provide a scope object when requesting a snapshot.');
@@ -22,7 +18,6 @@ export async function getSnapshot(scope) {
   const file = await getFile(fileKey);
 
   if (pageName) {
-    // Reduce output to just the requested page
     const matchingPages = file.document.children.filter(p => p.name === pageName);
     if (matchingPages.length === 0) {
       throw new Error(`[snapshot-service] Page "${pageName}" not found in file: ${file.name}`);
@@ -38,7 +33,8 @@ export async function getSnapshot(scope) {
 
   file.__meta = {
     snapshotGeneratedAt: new Date().toISOString(),
-    scope: scope
+    scope,
+    figmaApiVersion: 'unknown'
   };
 
   return file;
