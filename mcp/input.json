@@ -1,18 +1,18 @@
 {
     "files": [
-      { "path": "README.md", "content": "... (top-level README as finalized)" },
-      { "path": "core/README.md", "content": "... (core-level overview)" },
-      { "path": "core/figma-api/README.md", "content": "... (API client)" },
-      { "path": "core/scope/README.md", "content": "... (scope resolution)" },
-      { "path": "core/utils/README.md", "content": "... (shared utilities)" },
-      { "path": "examples/README.md", "content": "... (example overview)" },
-      { "path": "examples/plugins/README.md", "content": "... (plugin demos)" },
-      { "path": "examples/services/README.md", "content": "... (service demos)" },
-      { "path": "scripts/README.md", "content": "... (CLI tools)" },
-      { "path": "diagnostics/README.md", "content": "... (report storage)" },
-      { "path": "mcp/README.md", "content": "... (agent interface)" },
-      { "path": "knowledge-base/README.md", "content": "... (docs space)" }
+      {
+        "path": "knowledge-base/scaffolding-contract.md",
+        "content": ""
+      },
+      {
+        "path": "knowledge-base/scaffold-changelog.md",
+        "content": ""
+      },
+      {
+        "path": "knowledge-base/system-routines.md",
+        "content": ""
+      }
     ],
-    "commitMessage": "[Docs] Add scoped README.md files for all core modules, examples, utilities, and infrastructure folders"
+    "commitMessage": "[Docs] Add scaffolding contract, changelog, and system routines documentation"
   }
   
