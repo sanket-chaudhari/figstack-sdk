@@ -1,14 +1,11 @@
 {
-    "files": [
+    "actions": [
       {
-        "path": "examples/plugins/.keep",
-        "content": "// Folder for example plugins built on top of the core toolkit"
-      },
-      {
-        "path": "examples/services/.keep",
-        "content": "// Folder for example services and audit jobs using scoped utilities"
+        "type": "move",
+        "from": "examples/plugins/demo-mint-component-audit",
+        "to": "examples/plugins/demo-component-audit"
       }
     ],
-    "commitMessage": "[Refactor] Establish examples/ structure; relocate plugins/ and services/ as example implementations"
+    "commitMessage": "[Refactor] Rename demo-mint-component-audit → demo-component-audit to remove org-specific naming"
   }
   
