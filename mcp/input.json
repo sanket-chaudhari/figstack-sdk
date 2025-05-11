@@ -1,11 +1,18 @@
 {
-    "actions": [
-      {
-        "type": "move",
-        "from": "examples/plugins/demo-mint-component-audit",
-        "to": "examples/plugins/demo-component-audit"
-      }
+    "files": [
+      { "path": "README.md", "content": "... (top-level README as finalized)" },
+      { "path": "core/README.md", "content": "... (core-level overview)" },
+      { "path": "core/figma-api/README.md", "content": "... (API client)" },
+      { "path": "core/scope/README.md", "content": "... (scope resolution)" },
+      { "path": "core/utils/README.md", "content": "... (shared utilities)" },
+      { "path": "examples/README.md", "content": "... (example overview)" },
+      { "path": "examples/plugins/README.md", "content": "... (plugin demos)" },
+      { "path": "examples/services/README.md", "content": "... (service demos)" },
+      { "path": "scripts/README.md", "content": "... (CLI tools)" },
+      { "path": "diagnostics/README.md", "content": "... (report storage)" },
+      { "path": "mcp/README.md", "content": "... (agent interface)" },
+      { "path": "knowledge-base/README.md", "content": "... (docs space)" }
     ],
-    "commitMessage": "[Refactor] Rename demo-mint-component-audit → demo-component-audit to remove org-specific naming"
+    "commitMessage": "[Docs] Add scoped README.md files for all core modules, examples, utilities, and infrastructure folders"
   }
   
