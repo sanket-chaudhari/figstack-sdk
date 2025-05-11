@@ -1,10 +1,10 @@
 {
     "files": [
       {
-        "path": "scripts/parse-url.ts",
-        "content": "import '../scripts/.env.loader.js';\nimport { parseFigmaUrl } from '../core/utils/parseFigmaUrl.js';\nimport { resolveScope } from '../core/scope/resolveScope.js';\n\nconst inputUrl = process.argv[2];\nconst shouldResolve = process.argv.includes('--resolve');\nconst asJson = process.argv.includes('--json');\n\nif (!inputUrl) {\n  console.error('❌ Please provide a Figma URL as an argument.');\n  process.exit(1);\n}\n\nconst parsed = parseFigmaUrl(inputUrl);\n\nif (asJson) {\n  console.log(JSON.stringify(parsed, null, 2));\n  process.exit(0);\n}\n\nconsole.log('📦 Parsed URL:');\n\nif (!parsed.isValid) {\n  console.error(`❌ Invalid Figma URL → ${parsed.error}`);\n  process.exit(1);\n}\n\nconsole.log(`• fileKey: ${parsed.fileKey}`);\nif (parsed.nodeId) console.log(`• nodeId: ${parsed.nodeId}`);\nif (parsed.pageId) console.log(`• pageId: ${parsed.pageId}`);\nif (parsed.branchId) console.log(`• branchId: ${parsed.branchId}`);\n\nif (shouldResolve) {\n  console.log('\\n🔍 Resolving from Figma...');\n\n  resolveScope({ fileKey: parsed.fileKey, nodeId: parsed.nodeId })\n    .then(res => {\n      if (!res.valid) {\n        console.log(`❌ Resolution failed: ${res.error}`);\n      } else {\n        console.log(`• File name: “${res.fileName}”`);\n        if (res.diagnostics.nodeResolved) {\n          console.log(`• Node: “${res.diagnostics.nodeName}” [${res.diagnostics.nodeType}]`);\n        }\n      }\n    })\n    .catch(err => console.error('❌ Error during resolution:', err.message));\n}"
+        "path": ".gitignore",
+        "content": ".env\nnode_modules/\ndiagnostics/\n*.log\n.DS_Store"
       }
     ],
-    "commitMessage": "Add --json flag to parse-url.ts to return raw JSON output"
+    "commitMessage": "[Refactor] Move plugins and services to examples/, add .gitignore to protect secrets and runtime artifacts"
   }
   
