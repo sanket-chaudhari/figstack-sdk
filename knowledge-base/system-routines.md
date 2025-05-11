@@ -30,3 +30,25 @@ This ensures the tooling remains modular, reliable, and agent-compatible.
 ## 🧠 Agent Compatibility
 
 This file is intended to serve as a stable input for agent-based systems that participate in maintaining or evolving this repository. Any new long-term expectation must be added here.
+---
+
+## ✅ Routine: Scaffold Template Change Detection
+
+- Script: `scripts/check-scaffold-template-diff.ts`
+- Computes a fingerprint of the template directory (e.g., `plugin@1.0.0`)
+- Warns if any file inside it has changed since the last recorded snapshot
+- Use `--update` to manually approve intentional changes
+
+---
+
+## ✅ Routine: Scaffolded Project Drift Detection
+
+- Script: `scripts/check-project-vs-scaffold-drift.ts`
+- Reads `scaffold.json` from each plugin
+- Compares current folder state to the declared scaffold version
+- Flags:
+  - Extra or missing files
+  - Modified core files
+  - Unknown scaffold references
+
+This ensures that plugin folders remain aligned with their scaffold contracts.
