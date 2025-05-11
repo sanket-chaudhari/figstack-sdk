@@ -1,5 +1,40 @@
-.env
+# Node
 node_modules/
-diagnostics/
+dist/
+build/
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment variables
+.env
+.env.local
+.env.development
+.env.production
+.env.test
+.env.*.local
+
+# MCP and diagnostic outputs
+mcp/input.json
+mcp/output.json
+diagnostics/*.txt
+diagnostics/*.log
+
+# Snapshots and large data outputs
+**/snapshots/*.json
+**/snapshots/*.txt
+**/output.json
+**/__temp__/
+
+# OS/IDE
 .DS_Store
+*.swp
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Optional CLI history or shell state
+.history
+*.bak
