@@ -1,18 +1,19 @@
 {
     "files": [
       {
-        "path": "knowledge-base/scaffolding-contract.md",
-        "content": ""
+        "path": "scaffold-templates/plugin@1.0.0/index.ts",
+        "content": "import { resolveScope } from '@/core/scope/resolveScope';\n\nasync function main() {\n  const scope = await resolveScope();\n  if (!scope.valid) {\n    console.error('[Scaffold Plugin] Invalid scope:', scope.error);\n    return;\n  }\n\n  console.log(`[Scaffold Plugin] Scope resolved for file: ${scope.fileName}`);\n  // TODO: Add your plugin logic here.\n}\n\nmain();"
       },
       {
-        "path": "knowledge-base/scaffold-changelog.md",
-        "content": ""
-      },
-      {
-        "path": "knowledge-base/system-routines.md",
-        "content": ""
+        "path": "scaffold-templates/plugin@1.0.0/README.md",
+        "content": "# Plugin: <your-plugin-name>\n\nThis is a scaffolded plugin generated using `plugin@1.0.0`.\n\n---\n\n## 📌 Purpose\n\nExplain the intent of this plugin.  \nFor example: to audit component usage, verify token adoption, or capture diagnostics.\n\n---\n\n## 🧱 Structure\n\n```plaintext\nindex.ts         # Main logic entry point\ndiagnostics/     # Local folder for scoped logs\nscaffold.json    # Tracks scaffold version used\n```\n\n---\n\n## 🚀 Getting Started\n\nUpdate `index.ts` to include your logic.  \nUse helpers from `core/`, log output to `diagnostics/`.\n\nRun with:\n\n```bash\nnpx tsx examples/plugins/<your-plugin-name>/index.ts\n```\n\n---\n\n## 🔒 Scaffold Version\n\nThis plugin was generated using: `plugin@1.0.0`\n\nSee `/knowledge-base/scaffold-changelog.md` for update history."
       }
     ],
-    "commitMessage": "[Docs] Add scaffolding contract, changelog, and system routines documentation"
+    "directories": [
+      {
+        "path": "scaffold-templates/plugin@1.0.0/diagnostics"
+      }
+    ],
+    "commitMessage": "[Scaffold] Create base template for plugin@1.0.0 with index.ts, README, and diagnostics folder"
   }
   
