@@ -1,10 +1,14 @@
 {
     "files": [
       {
-        "path": ".gitignore",
-        "content": ".env\nnode_modules/\ndiagnostics/\n*.log\n.DS_Store"
+        "path": "examples/plugins/.keep",
+        "content": "// Folder for example plugins built on top of the core toolkit"
+      },
+      {
+        "path": "examples/services/.keep",
+        "content": "// Folder for example services and audit jobs using scoped utilities"
       }
     ],
-    "commitMessage": "[Refactor] Move plugins and services to examples/, add .gitignore to protect secrets and runtime artifacts"
+    "commitMessage": "[Refactor] Establish examples/ structure; relocate plugins/ and services/ as example implementations"
   }
   
