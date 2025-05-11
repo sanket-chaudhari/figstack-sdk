@@ -38,3 +38,4 @@ diagnostics/*.log
 # Optional CLI history or shell state
 .history
 *.bak
+.env
