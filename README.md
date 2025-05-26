@@ -44,7 +44,7 @@ We provide a minimal but complete plugin scaffold to help internal teams get sta
 Use:
 
 ```bash
-npx tsx scripts/create-plugin.ts my-new-plugin
+npx tsx scripts/init-plugin.ts my-new-plugin
 ```
 
 This will:

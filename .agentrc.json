@@ -1,0 +1,19 @@
+{
+  "protocol": "ai-handshake",
+  "version": "1.1.0",
+  "mcp": {
+    "enabled": true,
+    "requiresCommitMessage": true,
+    "format": "json",
+    "reviewStepRequired": true
+  },
+  "documentation": {
+    "folderLevelReadmes": true,
+    "knowledgeBase": "docs/",
+    "changelogEnabled": true
+  },
+  "roles": {
+    "softwareArchitect": "AI or human responsible for system structure and principles",
+    "docLead": "Responsible for updating module READMEs and cross-referencing changelogs"
+  }
+}
