@@ -1,138 +1,96 @@
-# Figma Tooling Infrastructure
+# figstack-sdk
 
-This repository provides a modular, extensible foundation for building Figma automation tools, plugins, and internal services. It is designed to serve as an open-source interface layer between your local developer environment and the Figma REST API — enabling audits, reports, adoption tracking, token extraction, plugin scaffolding, and more.
-
----
-
-## 🔧 Core Capabilities
-
-- Authenticated access to Figma’s REST API via personal tokens
-- Snapshot service to extract scoped Figma JSON (file, page, frame, etc.)
-- Schema comparison between snapshots to detect structural drift
-- Component usage parsing for adoption audits
-- Plugin scaffolding to accelerate internal UI tooling
-- CLI-based diagnostics and health reports
+The `figstack-sdk` is a modular, agent-compatible developer toolkit for building plugins, services, and diagnostics around Figma files, tokens, components, and system usage. It is designed to support AI-assisted workflows, manual scripting, and CI-driven automation.
 
 ---
 
-## 📁 Folder Structure
+## ✅ Project Purpose
 
-```plaintext
-core/                 → Foundational API wrappers and metadata utilities
-diagnostics/          → Scripts and logs for validating .env and scope setup
-examples/             → Reference plugins and services using core infra
-knowledge-base/       → Architecture decisions, principles, changelogs
-mcp/                  → Temporary workspace for MCP (manual copy-paste) I/O
-scripts/              → CLI tooling for developers (test-env, health-check)
-services/             → Internal backend jobs like snapshot-service
+This repository contains core modules and scaffolding patterns that support:
+
+- Traversing and reading Figma files using the REST API
+- Parsing Figma links and resolving node scopes
+- Running scoped diagnostics with readable logs
+- Generating and comparing structured snapshots
+- Building plugins and services that follow system conventions
+
+It supports both human developers and intelligent agents operating under protocol control.
+
+---
+
+## 🧩 Protocol & Governance
+
+This repository follows the [ai-handshake](https://github.com/sanket-chaudhari/ai-handshake) collaboration protocol.
+
+- 📄 Current protocol version and configuration can be found in `.agentrc.json`
+- 📚 Transition context is documented in: `docs/handshake-context.md`
+- 🧠 All updates are tracked using Modular Code Payloads (MCPs)
+- 📌 Committed changes reflect milestones, module evolution, or architecture shifts
+
+---
+
+## 🧱 Folder Structure (as of latest integration)
+
+```
+core/                  → Authenticated Figma API clients, scope resolution logic
+utils/                 → Stateless utilities (parsing, logging, fallbacks)
+scripts/               → CLI developer tools for testing and validation
+plugins/               → Functional tools built using the SDK
+services/              → Long-running or batch-mode tools (scaffolded)
+mcp/                   → Local execution agent for modular code payloads
+diagnostics/           → Structured logs generated per plugin or scope
+scaffold-templates/    → Reusable plugin/service bootstrap templates
+docs/                  → Architecture, protocol, changelog, and version maps
 ```
 
 ---
 
-## 🧱 Modular Philosophy
+## 🧪 CLI Tooling
 
-Each folder is self-contained and explicitly avoids circular dependencies. The `core/` folder is considered the lowest layer and must not import from `scripts/`, `examples/`, or `services`.
+This SDK provides scoped developer tools using `tsx`:
 
-Plugins and services are allowed to use any module in `core/`.
+| Script                  | Purpose                                      |
+|--------------------------|----------------------------------------------|
+| `scripts/test-env.ts`   | Validate `.env` and project setup            |
+| `scripts/parse-url.ts`  | Normalize any valid Figma link               |
+| `scripts/init-plugin.ts`| Scaffold a new plugin using internal template|
 
----
-
-## 🚀 Scaffolding
-
-We provide a minimal but complete plugin scaffold to help internal teams get started quickly.
-
-Use:
+Run any script using:
 
 ```bash
-npx tsx scripts/init-plugin.ts my-new-plugin
-```
-
-This will:
-
-- Generate a new plugin folder in `examples/plugins/`
-- Add a sample `plugin.json`, `code.ts`, `ui.html`
-- Inject a README explaining how to start development
-
-### Versioning & Maintenance
-
-The scaffolding template is version-controlled and stored inside `core/utils/scaffolding/`. Any updates to the scaffold template should:
-
-- Be followed by a regeneration of the golden snapshot
-- Trigger a changelog entry
-- Be communicated to dependent teams if in active use
-
-Scaffold diffs can be tested using:
-
-```bash
-npx tsx scripts/check-scaffold-drift.ts <projectFolder>
+npx tsx scripts/<script>.ts
 ```
 
 ---
 
-## 📌 Design Principles
+## 📁 Logs and Outputs
 
-- **Modular by Default** – All logic is split across reusable units
-- **No IP Leakage** – This repo must not contain any organization-specific tokens, names, or links
-- **Composable** – All building blocks must work independently
-- **Readable by AI Agents** – Every module must be clearly documented for codegen and LLM traversal
+All outputs are scoped to the plugin/service/module that generated them.
 
----
+- Snapshots → `snapshots/<plugin>/...`
+- Diagnostics → `diagnostics/<plugin>/...`
+- Reports → may be scoped internally by service
 
-## 🧪 Testing Strategy
-
-We follow a progressive scaffolding-based QA approach:
-- Run diagnostic scripts on `.env` and `scope`
-- Validate snapshot parsing through example plugins
-- Surface diff logs on breaking schema changes
+This maintains traceability and prevents global log pollution.
 
 ---
 
-## 📎 Contribution Model
+## ✍️ Contribution Guidelines
 
-- Clone or fork this repo
-- Add your utility as a module inside `core/utils/`
-- Follow the naming, README, and documentation conventions
-- Test against your `.env` using `scripts/test-env.ts`
-
-When in doubt, read `knowledge-base/README.md`
+- Use MCPs for all agent-authored file changes
+- All module folders must include a `README.md`
+- Any new functionality must log scoped outputs and update `changelog.md`
+- Human developers should review `.agentrc.json` for configuration expectations
 
 ---
 
-## 📆 Next Milestones
+## 📌 Active Protocol Hooks
 
-- Implement centralized snapshot service
-- Add usage scoring and heatmaps for component audits
-- Expand URL parser to support project/team views
-- Publish scoped NPM packages
-
----
-
-## 🧠 Suggested Usage
-
-This repo is best used as a low-level base — you can:
-- Fork it for your company’s design system monitoring
-- Use the plugins folder to test quick internal tooling
-- Run health-check scripts weekly via CRON
-- Maintain snapshot logs to see what’s changing in your Figma universe
+- `docs/handshake-context.md` — migration background
+- `docs/mcp-agent.md` — future GitHub integration notes
+- `docs/changelog.md` — live log of milestone-tagged commits
+- `docs/version-map.md` — system version alignment
 
 ---
 
-> This project is actively maintained and intended to be the seed for larger open-source design infrastructure tooling.
-
----
-
-26 May 2025:
-
-## 🤖 Protocol Update Notice
-
-This repository has adopted the [`ai-handshake`](https://github.com/sanket-chaudhari/ai-handshake) protocol (v1.1.0) as of May 2025.
-
-All AI-human collaboration is now structured around:
-
-- **Milestones** and explicit build steps  
-- **Modular Code Payloads (MCPs)** for file updates  
-- **Agent-readable configuration** via `.agentrc.json`  
-- **Folder-level READMEs and changelogs** for traceability  
-
-This protocol improves clarity, reviewability, and long-term maintainability of the codebase.  
-You can find the full context in `docs/handshake-context.md`.
+This system is now protocol-aware and ready for agent-based iteration and long-term maintainability.
