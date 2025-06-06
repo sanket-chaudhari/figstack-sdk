@@ -1,29 +1,38 @@
-// Simple test script to fetch a frame node from a Figma file
-import { FigmaAPI } from '../../core/api/figma-api';
+import { FigmaAPI } from '../../core/figma-api/figma-api';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
 
 const run = async () => {
-  const fileKey = 'YOUR_FILE_KEY'; // Replace with actual file key
-  const nodeId = 'YOUR_NODE_ID';   // Replace with actual node ID (e.g., '0:1')
+  const fileKey = process.env.TEST_FILE_KEY;
+  const token = process.env.FIGMA_PERSONAL_ACCESS_TOKEN;
 
-  const figma = new FigmaAPI({
-    personalAccessToken: process.env.FIGMA_PERSONAL_ACCESS_TOKEN!,
-  });
+  console.log('[Runner] Token exists?', !!token);
+  console.log('[Runner] FileKey:', fileKey);
+
+  if (!fileKey || !token) {
+    console.error('❌ Missing required env variables: TEST_FILE_KEY or FIGMA_PERSONAL_ACCESS_TOKEN.');
+    process.exit(1);
+  }
+
+  const figma = new FigmaAPI({ personalAccessToken: token });
 
   try {
-    const response = await figma.getFileNodes(fileKey, [nodeId]);
-    const node = response.nodes?.[nodeId]?.document;
+    const file = await figma.getFile(fileKey);
+    console.log(`✅ Successfully fetched file: ${file.name}`);
+    const pages = file.document.children;
 
-    if (node) {
-      console.log('✅ Successfully fetched frame node:');
-      console.dir(node, { depth: null });
-    } else {
-      console.error('❌ Frame node not found.');
+    console.log(`[Runner] Total pages found: ${pages.length}`);
+
+    for (const page of pages) {
+      console.log(`📄 Page: ${page.name}`);
+      const frames = page.children?.filter((n: any) => n.type === 'FRAME');
+      for (const frame of frames ?? []) {
+        console.log(`  🖼️ Frame: ${frame.name} (ID: ${frame.id})`);
+      }
     }
   } catch (err) {
-    console.error('❌ Error fetching node from Figma:', err);
+    console.error('❌ Error fetching file from Figma:', err);
   }
 };
 

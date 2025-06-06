@@ -1,22 +1,25 @@
-import 'dotenv/config';
+export class FigmaAPI {
+  private token: string;
 
-export async function getFile(fileKey: string, nodeId?: string) {
-  const FIGMA_TOKEN = process.env.FIGMA_PERSONAL_ACCESS_TOKEN;
-  if (!FIGMA_TOKEN) throw new Error('[figma-api] Missing FIGMA_PERSONAL_ACCESS_TOKEN');
-
-  const url = nodeId
-    ? `https://api.figma.com/v1/files/${fileKey}?ids=${encodeURIComponent(nodeId)}`
-    : `https://api.figma.com/v1/files/${fileKey}`;
-
-  const res = await fetch(url, {
-    headers: {
-      'X-Figma-Token': FIGMA_TOKEN,
-    },
-  });
-
-  if (!res.ok) {
-    throw new Error(`[figma-api] Failed to fetch file data: ${res.status}`);
+  constructor({ personalAccessToken }: { personalAccessToken: string }) {
+    console.log('[FigmaAPI] Initialized with token length:', personalAccessToken?.length);
+    this.token = personalAccessToken;
   }
 
-  return await res.json();
+  async getFile(fileKey: string, nodeId?: string) {
+    console.log('[FigmaAPI] Fetching file:', fileKey, 'Node ID:', nodeId);
+
+    const url = nodeId
+      ? `https://api.figma.com/v1/files/${fileKey}?ids=${encodeURIComponent(nodeId)}`
+      : `https://api.figma.com/v1/files/${fileKey}`;
+
+    const res = await fetch(url, {
+      headers: { 'X-Figma-Token': this.token },
+    });
+
+    console.log('[FigmaAPI] Fetch response status:', res.status);
+
+    if (!res.ok) throw new Error(`[figma-api] Failed with status ${res.status}`);
+    return await res.json();
+  }
 }
