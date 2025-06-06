@@ -39,3 +39,6 @@ diagnostics/*.log
 .history
 *.bak
 .env
+
+# Figma dump
+figma-file-dump.json

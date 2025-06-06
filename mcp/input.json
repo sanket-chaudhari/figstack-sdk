@@ -1,9 +1,13 @@
 {
   "files": [
     {
-      "path": "scripts/sandbox/test-fetch-frame.ts",
-      "content": "// Test script to fetch all pages and frames from a Figma file\nimport { FigmaAPI } from '@core/api/figma-api.js';\nimport * as dotenv from 'dotenv';\n\ndotenv.config();\n\nconst run = async () => {\n  const fileKey = process.env.TEST_FILE_KEY!;\n  const token = process.env.FIGMA_PERSONAL_ACCESS_TOKEN;\n\n  if (!fileKey || !token) {\n    console.error('❌ Missing required env variables: TEST_FILE_KEY or FIGMA_PERSONAL_ACCESS_TOKEN.');\n    process.exit(1);\n  }\n\n  const figma = new FigmaAPI({ personalAccessToken: token });\n\n  try {\n    const file = await figma.getFile(fileKey);\n    console.log(`✅ Successfully fetched file: ${file.name}`);\n    const pages = file.document.children;\n\n    for (const page of pages) {\n      console.log(`📄 Page: ${page.name}`);\n      const frames = page.children?.filter((node: any) => node.type === 'FRAME');\n\n      if (frames?.length) {\n        for (const frame of frames) {\n          console.log(`  🖼️ Frame: ${frame.name} (ID: ${frame.id})`);\n        }\n      }\n    }\n  } catch (err) {\n    console.error('❌ Error fetching file from Figma:', err);\n  }\n};\n\nrun();"
+      "path": "scripts/sandbox/dump-file-json.ts",
+      "content": "// Sandbox-only: dumps the full Figma file JSON to figma-file-dump.json\nimport * as fs from 'fs';\nimport * as path from 'path';\nimport * as dotenv from 'dotenv';\n\ndotenv.config();\n\nconst token = process.env.FIGMA_PERSONAL_ACCESS_TOKEN!;\nconst fileKey = process.env.TEST_FILE_KEY!;\n\nif (!token || !fileKey) {\n  console.error('❌  Missing FIGMA_PERSONAL_ACCESS_TOKEN or TEST_FILE_KEY in .env');\n  process.exit(1);\n}\n\nasync function dump() {\n  const url = `https://api.figma.com/v1/files/${fileKey}`;\n  console.log('📡  Fetching:', url);\n\n  const res = await fetch(url, {\n    headers: { 'X-Figma-Token': token },\n  });\n\n  if (!res.ok) {\n    console.error(`❌  Figma API responded ${res.status}`);\n    process.exit(1);\n  }\n\n  const json = await res.json();\n  const outFile = path.resolve('figma-file-dump.json');\n  fs.writeFileSync(outFile, JSON.stringify(json, null, 2), 'utf8');\n  console.log('✅  Full JSON saved to', outFile);\n}\n\ndump().catch(err => console.error('❌  Unexpected error:', err));\n"
+    },
+    {
+      "path": ".gitignore",
+      "content": "# Node\nnode_modules/\ndist/\nbuild/\n*.log\nnpm-debug.log*\nyarn-debug.log*\nyarn-error.log*\n\n# Environment variables\n.env\n.env.local\n.env.development\n.env.production\n.env.test\n.env.*.local\n\n# MCP and diagnostic outputs\nmcp/input.json\nmcp/output.json\ndiagnostics/*.txt\ndiagnostics/*.log\n\n# Snapshots and large data outputs\n**/snapshots/*.json\n**/snapshots/*.txt\n**/output.json\n**/__temp__/\n\n# OS/IDE\n.DS_Store\n*.swp\n.vscode/\n.idea/\n*.sublime-workspace\n*.sublime-project\n\n# Optional CLI history or shell state\n.history\n*.bak\n.env\n\n# Figma dump\nfigma-file-dump.json\n"
     }
   ],
-  "commitMessage": "fix(sandbox): update import in test-fetch-frame.ts to include .js extension for ESM compatibility"
+  "commitMessage": "feat(sandbox): add dump-file-json.ts and keep full .gitignore while ignoring figma-file-dump.json"
 }
