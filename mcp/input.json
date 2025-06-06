@@ -1,20 +1,9 @@
 {
   "files": [
     {
-      "file": "scripts/test-env.ts",
-      "actions": [
-        {
-          "type": "update-function",
-          "function": "runDiagnostic",
-          "description": "Test MCP: Add inline comment after snapshot log",
-          "implementation": {
-            "after": "log('🔍 Fetching fresh snapshot...');",
-            "insert": [
-              "// ✅ MCP test: inserted by test payload"
-            ]
-          }
-        }
-      ]
+      "path": "scripts/sandbox/test-fetch-frame.ts",
+      "content": "// Simple test script to fetch a frame node from a Figma file\nimport { FigmaAPI } from '../../core/api/figma-api';\nimport * as dotenv from 'dotenv';\n\ndotenv.config();\n\nconst run = async () => {\n  const fileKey = 'YOUR_FILE_KEY'; // Replace with actual file key\n  const nodeId = 'YOUR_NODE_ID';   // Replace with actual node ID (e.g., '0:1')\n\n  const figma = new FigmaAPI({\n    personalAccessToken: process.env.FIGMA_PERSONAL_ACCESS_TOKEN!,\n  });\n\n  try {\n    const response = await figma.getFileNodes(fileKey, [nodeId]);\n    const node = response.nodes?.[nodeId]?.document;\n\n    if (node) {\n      console.log('✅ Successfully fetched frame node:');\n      console.dir(node, { depth: null });\n    } else {\n      console.error('❌ Frame node not found.');\n    }\n  } catch (err) {\n    console.error('❌ Error fetching node from Figma:', err);\n  }\n};\n\nrun();"
     }
-  ]
+  ],
+  "commitMessage": "chore(sandbox): add test-fetch-frame.ts to validate Figma frame node retrieval"
 }
